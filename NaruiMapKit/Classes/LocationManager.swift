@@ -16,6 +16,7 @@ public class LocationManager: NSObject {
     static let shared = LocationManager()
     var authStatus:CLAuthorizationStatus? = nil
     let manager = CLLocationManager()
+    public var myLocation:[CLLocation] = []
     
     override init() {
         super.init()
@@ -61,6 +62,8 @@ extension LocationManager: CLLocationManagerDelegate {
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         print(locations)
+        myLocation = locations
+        
         #if targetEnvironment(simulator)
         let testLocations = [CLLocation(latitude: 37.0075355, longitude: 126.9816988)]
         self.getLocation?(testLocations)

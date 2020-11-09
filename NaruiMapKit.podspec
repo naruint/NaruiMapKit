@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/naruint/NaruiMapKit.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/kongbaguni'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '12.0'
 
   s.source_files = 'NaruiMapKit/Classes/**/*'
   
@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   # }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
+  s.frameworks = 'UIKit', 'MapKit', 'CoreLocation'
   s.dependency 'Alamofire'
   s.dependency 'RxSwift'
   s.dependency 'RxCocoa'  

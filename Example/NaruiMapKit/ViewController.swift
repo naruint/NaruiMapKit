@@ -8,6 +8,7 @@
 
 import UIKit
 import NaruiMapKit
+import CoreLocation
 
 class ViewController: UIViewController {
 
@@ -15,12 +16,18 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        mapApiManager.get(query: "병원", radius: 1000) { (result) in
-            
-        }
         
     }
-
+    @IBAction func onTouchupBtn(_ sender: Any) {
+        let radius = 2000
+        mapApiManager.get(query: "병원", radius: radius) { (result) in
+            let vc = NaruMapViewController.viewController
+            vc.viewModel = result
+            vc.altitude = CLLocationDistance(radius * 2)
+            self.present(vc, animated: true, completion: nil)
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

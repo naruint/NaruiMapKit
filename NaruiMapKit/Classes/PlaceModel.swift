@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import CoreLocation
+
 extension NaruMapApiManager {
     public struct Document : Codable {
         let id:String
@@ -20,6 +22,19 @@ extension NaruMapApiManager {
         let place_url:String
         let category_group_name:String
         let category_name:String
+        
+        var coordinate:CLLocationCoordinate2D {
+            let lat = NSString(string:y).doubleValue
+            let long = NSString(string:x).doubleValue
+            return CLLocationCoordinate2D(latitude: lat, longitude: long)
+        }
+        
+        var location : CLLocation {
+            let lat = NSString(string:y).doubleValue
+            let long = NSString(string:x).doubleValue
+            return CLLocation(latitude: lat, longitude: long)
+        }
+        
     }
 
     public struct SameName : Codable {
