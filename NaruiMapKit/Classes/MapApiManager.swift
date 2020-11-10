@@ -10,36 +10,24 @@ import Alamofire
 import CoreLocation
 
 public class NaruMapApiManager {
-    let apikey:String
-    public init(apiKey:String) {
-        self.apikey = apiKey
-    }
+    static public let shared = NaruMapApiManager()
+    public var apikey:String? = nil
     
-    private let keyId = "93z75sc89q"
-//    private let key = "PCzBfiKEeZGlKBfIJOjmlIH8iP5YDEuaUqu4lddx"
-    
-    private var page:Int = 1 {
-        didSet {
-            if page == 1 {
-                result.removeAll()
-            }
+    public func get(query:String, radius:Int, page:Int, complete:@escaping(_ result:ViewModel?)->Void)  {
+        guard let apiKey = self.apikey else {
+            print("apiKey Not Set")
+            abort()
         }
-    }
-    private var result:[String] = []
-
-    public func get(query:String, radius:Int ,complete:@escaping(_ result:ViewModel?)->Void)  {
-        let apiKey = self.apikey
         func request(locations:[CLLocation]) {
-            let s = self
             Alamofire.request("https://dapi.kakao.com/v2/local/search/keyword.json",
                               method: .get,
                               parameters: [
                                 "x":locations.first?.coordinate.longitude ?? 0.0,
                                 "y":locations.first?.coordinate.latitude  ?? 0.0,
                                 "radius":radius,
-                                "page":s.page,
+                                "page":page,
                                 "size":10,
-                                "sort":"accuracy",
+                                "sort":"distance",
                                 "query":query,
                               ], headers: ["Authorization":"KakaoAK \(apiKey)"])
                 .responseJSON {(response) in

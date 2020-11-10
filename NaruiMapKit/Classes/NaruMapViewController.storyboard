@@ -18,20 +18,24 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="LKe-of-0sB">
-                                <rect key="frame" x="0.0" y="44" width="414" height="300"/>
+                                <rect key="frame" x="0.0" y="104" width="414" height="300"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="300" id="UzV-hV-dPE"/>
                                 </constraints>
                             </mapView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="O6F-ZJ-0Oe">
-                                <rect key="frame" x="0.0" y="344" width="414" height="518"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="O6F-ZJ-0Oe">
+                                <rect key="frame" x="0.0" y="404" width="414" height="458"/>
+                                <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="0yU-91-dqK">
+                                    <rect key="frame" x="0.0" y="111.5" width="414" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" title="더보기"/>
+                                </button>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" textLabel="KZF-Rx-dUC" detailTextLabel="a3i-go-SUX" style="IBUITableViewCellStyleSubtitle" id="NNT-sn-UMY">
-                                        <rect key="frame" x="20" y="55.5" width="374" height="55.5"/>
+                                        <rect key="frame" x="0.0" y="28" width="414" height="55.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="NNT-sn-UMY" id="sl2-V5-Hkz">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="55.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="55.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="KZF-Rx-dUC">
@@ -57,21 +61,56 @@
                                     <outlet property="delegate" destination="oub-Yl-8XU" id="Yhm-sE-2YN"/>
                                 </connections>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SkJ-Hi-GSg">
+                                <rect key="frame" x="0.0" y="44" width="414" height="60"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="HUN-Va-dtS">
+                                        <rect key="frame" x="25" y="10" width="364" height="40"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2tS-8I-aB6">
+                                                <rect key="frame" x="0.0" y="0.0" width="254" height="40"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            </view>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UBj-7Y-nSL">
+                                                <rect key="frame" x="264" y="0.0" width="100" height="40"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="100" id="Y3K-2r-LNu"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="HUN-Va-dtS" firstAttribute="top" secondItem="SkJ-Hi-GSg" secondAttribute="top" constant="10" id="EHF-kM-oVg"/>
+                                    <constraint firstAttribute="bottom" secondItem="HUN-Va-dtS" secondAttribute="bottom" constant="10" id="NRM-xB-t0T"/>
+                                    <constraint firstItem="HUN-Va-dtS" firstAttribute="leading" secondItem="SkJ-Hi-GSg" secondAttribute="leading" constant="25" id="eBt-dY-k63"/>
+                                    <constraint firstAttribute="height" constant="60" id="jyf-BK-z4G"/>
+                                    <constraint firstAttribute="trailing" secondItem="HUN-Va-dtS" secondAttribute="trailing" constant="25" id="wkk-tB-I0s"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="rNI-DN-FBL"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="rNI-DN-FBL" firstAttribute="top" secondItem="SkJ-Hi-GSg" secondAttribute="top" id="5jV-DP-y43"/>
                             <constraint firstItem="rNI-DN-FBL" firstAttribute="bottom" secondItem="O6F-ZJ-0Oe" secondAttribute="bottom" id="MQL-Ab-Jfp"/>
                             <constraint firstItem="rNI-DN-FBL" firstAttribute="trailing" secondItem="O6F-ZJ-0Oe" secondAttribute="trailing" id="NpU-ET-1iN"/>
                             <constraint firstItem="rNI-DN-FBL" firstAttribute="trailing" secondItem="LKe-of-0sB" secondAttribute="trailing" id="PfZ-if-5aA"/>
+                            <constraint firstItem="LKe-of-0sB" firstAttribute="top" secondItem="SkJ-Hi-GSg" secondAttribute="bottom" id="XHj-LQ-Rfo"/>
+                            <constraint firstItem="rNI-DN-FBL" firstAttribute="trailing" secondItem="SkJ-Hi-GSg" secondAttribute="trailing" id="b7C-xb-NNn"/>
+                            <constraint firstItem="SkJ-Hi-GSg" firstAttribute="leading" secondItem="rNI-DN-FBL" secondAttribute="leading" id="bnX-K7-3gH"/>
                             <constraint firstItem="O6F-ZJ-0Oe" firstAttribute="top" secondItem="LKe-of-0sB" secondAttribute="bottom" id="eLw-iJ-THi"/>
-                            <constraint firstItem="LKe-of-0sB" firstAttribute="top" secondItem="rNI-DN-FBL" secondAttribute="top" id="f0y-0w-ovB"/>
                             <constraint firstItem="LKe-of-0sB" firstAttribute="leading" secondItem="rNI-DN-FBL" secondAttribute="leading" id="fI5-U5-Nla"/>
                             <constraint firstItem="O6F-ZJ-0Oe" firstAttribute="leading" secondItem="rNI-DN-FBL" secondAttribute="leading" id="g5E-XJ-mak"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="mapView" destination="LKe-of-0sB" id="3J2-Xk-Iao"/>
+                        <outlet property="moreLoadBtn" destination="0yU-91-dqK" id="gkC-Ua-Zf4"/>
+                        <outlet property="rangeTextField" destination="UBj-7Y-nSL" id="uSf-Ee-jjt"/>
                         <outlet property="tableView" destination="O6F-ZJ-0Oe" id="moW-8c-as8"/>
                     </connections>
                 </viewController>

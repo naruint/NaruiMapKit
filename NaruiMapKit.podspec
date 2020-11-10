@@ -22,9 +22,9 @@ Pod::Spec.new do |s|
 
   s.source_files = 'NaruiMapKit/Classes/**/*'
   
-  # s.resource_bundles = {
-  #   'NaruiMapKit' => ['NaruiMapKit/Assets/*.png']
-  # }
+  s.resource_bundles = {
+      'NaruiMapKit' => ['NaruiMapKit/Assets/**/**/*']
+  }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'UIKit', 'MapKit', 'CoreLocation'
