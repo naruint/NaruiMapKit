@@ -35,6 +35,10 @@ extension NaruMapApiManager {
             return CLLocation(latitude: lat, longitude: long)
         }
         
+        func getDistance(from:CLLocation? = nil)->CLLocationDistance? {
+            let from = from ?? LocationManager.shared.myLocation.last
+            return from?.distance(from: location)
+        }
     }
 
     public struct SameName : Codable {

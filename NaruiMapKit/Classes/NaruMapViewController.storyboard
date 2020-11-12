@@ -25,11 +25,6 @@
                             </mapView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="O6F-ZJ-0Oe">
                                 <rect key="frame" x="0.0" y="404" width="414" height="458"/>
-                                <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="0yU-91-dqK">
-                                    <rect key="frame" x="0.0" y="111.5" width="414" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <state key="normal" title="더보기"/>
-                                </button>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" textLabel="KZF-Rx-dUC" detailTextLabel="a3i-go-SUX" style="IBUITableViewCellStyleSubtitle" id="NNT-sn-UMY">
                                         <rect key="frame" x="0.0" y="28" width="414" height="55.5"/>
@@ -69,7 +64,21 @@
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2tS-8I-aB6">
                                                 <rect key="frame" x="0.0" y="0.0" width="254" height="40"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rIM-nh-1wI">
+                                                        <rect key="frame" x="0.0" y="0.0" width="254" height="40"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstItem="rIM-nh-1wI" firstAttribute="top" secondItem="2tS-8I-aB6" secondAttribute="top" id="4C3-Es-7eD"/>
+                                                    <constraint firstAttribute="trailing" secondItem="rIM-nh-1wI" secondAttribute="trailing" id="TQj-1t-WfD"/>
+                                                    <constraint firstItem="rIM-nh-1wI" firstAttribute="leading" secondItem="2tS-8I-aB6" secondAttribute="leading" id="cSw-bK-Utm"/>
+                                                    <constraint firstAttribute="bottom" secondItem="rIM-nh-1wI" secondAttribute="bottom" id="jTy-ap-kj5"/>
+                                                </constraints>
                                             </view>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UBj-7Y-nSL">
                                                 <rect key="frame" x="264" y="0.0" width="100" height="40"/>
@@ -108,8 +117,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="keywordLabel" destination="rIM-nh-1wI" id="SRW-0g-JQM"/>
                         <outlet property="mapView" destination="LKe-of-0sB" id="3J2-Xk-Iao"/>
-                        <outlet property="moreLoadBtn" destination="0yU-91-dqK" id="gkC-Ua-Zf4"/>
                         <outlet property="rangeTextField" destination="UBj-7Y-nSL" id="uSf-Ee-jjt"/>
                         <outlet property="tableView" destination="O6F-ZJ-0Oe" id="moW-8c-as8"/>
                     </connections>
