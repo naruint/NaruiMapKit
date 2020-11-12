@@ -19,7 +19,7 @@ public class NaruMapApiManager {
             abort()
         }
         func request(locations:[CLLocation]) {
-            Alamofire.request("https://dapi.kakao.com/v2/local/search/keyword.json",
+            AF.request("https://dapi.kakao.com/v2/local/search/keyword.json",
                               method: .get,
                               parameters: [
                                 "x":locations.first?.coordinate.longitude ?? 0.0,
@@ -34,13 +34,12 @@ public class NaruMapApiManager {
                     guard let data = response.data else {
                         return
                     }
-                    if let str = String(data: data, encoding: .utf8) {
-                        if let result = ViewModel.makeModel(string: str) {
-                            complete(result)
-                            return
-                        }
+                    if let str = String(data: data, encoding: .utf8),
+                       let result = ViewModel.makeModel(string: str) {
+                        complete(result)
+                    } else {
+                        complete(nil)
                     }
-                    complete(nil)
                 }
         }
         
