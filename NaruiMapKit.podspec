@@ -30,5 +30,7 @@ Pod::Spec.new do |s|
   s.frameworks = 'UIKit', 'MapKit', 'CoreLocation'
   s.dependency 'Alamofire'
   s.dependency 'RxSwift'
-  s.dependency 'RxCocoa'  
+  s.dependency 'RxCocoa'
+  s.dependency 'NaruiUIComponents'
+
 end
