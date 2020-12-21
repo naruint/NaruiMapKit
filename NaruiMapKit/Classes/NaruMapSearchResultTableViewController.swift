@@ -8,6 +8,8 @@
 import UIKit
 import MapKit
 import NaruiUIComponents
+import RxCocoa
+import RxSwift
 
 protocol NaruMapSearchResultTableViewControllerDelegate : class {
     func mapSearchResultSelect(data:NaruMapApiManager.Document, indexPath:IndexPath)
@@ -41,7 +43,7 @@ class NaruMapSearchResultTableViewController: UITableViewController {
     }
     
     weak var delegate:NaruMapSearchResultTableViewControllerDelegate? = nil
-    
+    let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +51,9 @@ class NaruMapSearchResultTableViewController: UITableViewController {
         distancePicker.dataSource = self
         headerTextField.inputView = distancePicker
         tableView.addSubview(emptyView)
-        
+        headerButton.rx.tap.bind { [unowned self](_) in
+            headerTextField.becomeFirstResponder()
+        }.disposed(by: disposeBag)
     }
     
     override func viewDidLayoutSubviews() {
