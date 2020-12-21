@@ -25,10 +25,13 @@ Pod::Spec.new do |s|
   s.resource_bundles = {
       'NaruiMapKit' => ['NaruiMapKit/Assets/**/**/*']
   }
+  s.resources = 'NaruiMapKit/Assets/*.{xib,storyboard,xcassets}'
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'UIKit', 'MapKit', 'CoreLocation'
   s.dependency 'Alamofire'
   s.dependency 'RxSwift'
-  s.dependency 'RxCocoa'  
+  s.dependency 'RxCocoa'
+  s.dependency 'NaruiUIComponents'
+
 end
