@@ -295,7 +295,7 @@
                         </view>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="mvP-Kd-Qkk"/>
-                    <color key="backgroundColor" name="white"/>
+                    <color key="backgroundColor" name="whiteThree"/>
                     <constraints>
                         <constraint firstItem="J61-ry-yTT" firstAttribute="top" secondItem="mvP-Kd-Qkk" secondAttribute="top" constant="6" id="hkQ-FZ-2WJ"/>
                         <constraint firstItem="J61-ry-yTT" firstAttribute="centerX" secondItem="mvP-Kd-Qkk" secondAttribute="centerX" id="rn5-m2-Y1O"/>
