@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'NaruiMapKit'
-  s.version          = '0.1.4'
+  s.version          = '0.1.5'
   s.summary          = 'Narui Map Kit'
   s.description      = '키워드로 지도 검색 등을 사용하기 위한 라이브러리'
   s.homepage         = 'https://github.com/naruint/NaruiMapKit'
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { '서창열' => 'kongbaguni@gmail.com' }
   s.source           = { :git => 'https://github.com/naruint/NaruiMapKit.git', :tag => s.version.to_s }
-  s.social_media_url = 'https://twitter.com/kongbaguni'
+  s.social_media_url = 'https://www.facebook.com/kongbaguni'
 
   s.ios.deployment_target = '12.0'
 
