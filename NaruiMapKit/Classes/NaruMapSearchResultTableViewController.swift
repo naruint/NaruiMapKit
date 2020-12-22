@@ -44,6 +44,10 @@ class NaruMapSearchResultTableViewController: UITableViewController {
     }
     
     weak var delegate:NaruMapSearchResultTableViewControllerDelegate? = nil
+    var mapViewController:NaruMapViewController? {
+        delegate as? NaruMapViewController
+    }
+    
     let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
@@ -61,19 +65,19 @@ class NaruMapSearchResultTableViewController: UITableViewController {
             headerTextField.becomeFirstResponder()
         }.disposed(by: disposeBag)
         
-        if let range = (delegate as? NaruMapViewController)?.ranges {
+        if let range = mapViewController?.ranges {
             let index = UserDefaults.standard.getLastSelectedRangeIndex(rangeCount: range.count)
             headerTextField.text = range[index].title
             distancePicker.selectRow(index, inComponent: 0, animated: false)
         }
-        if let img = (delegate as? NaruMapViewController)?.emptyViewImage {
+        if let img = mapViewController?.emptyViewImage {
             emptyImageView.image = img
         }
     }
     
     
     func checkEmptyViewHidden() {
-        emptyView.isHidden = data.count > 0
+        emptyView.isHidden = data.count > 0 || mapViewController?.isApiCall == false
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -135,17 +139,17 @@ extension NaruMapSearchResultTableViewController : UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return (delegate as? NaruMapViewController)?.ranges.count ?? 0
+        return mapViewController?.ranges.count ?? 0
     }
 }
 
 extension NaruMapSearchResultTableViewController : UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return (delegate as? NaruMapViewController)?.ranges[row].title
+        return mapViewController?.ranges[row].title
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if let vc = (delegate as? NaruMapViewController) {
+        if let vc = mapViewController {
             UserDefaults.standard.lastSelectedRangeIndex = row
             let title = vc.ranges[row].title
             vc.altitude = vc.ranges[row].range

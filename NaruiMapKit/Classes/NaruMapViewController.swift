@@ -101,7 +101,7 @@ public class NaruMapViewController: UIViewController {
     let camera = MKMapCamera()
 
     let disposeBag = DisposeBag()
-    
+    var isApiCall = false
     public static var viewController : NaruMapViewController {
         if #available(iOS 13.0, *) {
             return
@@ -225,6 +225,7 @@ public class NaruMapViewController: UIViewController {
             guard let s = self else {
                 return
             }
+            s.isApiCall = true
             print(viewModel ?? "")
             
             if let model = viewModel {
