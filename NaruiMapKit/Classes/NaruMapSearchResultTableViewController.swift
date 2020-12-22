@@ -10,7 +10,6 @@ import MapKit
 import NaruiUIComponents
 import RxCocoa
 import RxSwift
-
 protocol NaruMapSearchResultTableViewControllerDelegate : class {
     func mapSearchResultSelect(data:NaruMapApiManager.Document, indexPath:IndexPath)
 }
@@ -54,6 +53,13 @@ class NaruMapSearchResultTableViewController: UITableViewController {
         headerButton.rx.tap.bind { [unowned self](_) in
             headerTextField.becomeFirstResponder()
         }.disposed(by: disposeBag)
+        
+        if let range = (delegate as? NaruMapViewController)?.ranges {
+            let index = UserDefaults.standard.getLastSelectedRangeIndex(rangeCount: range.count)
+            headerTextField.text = range[index].title
+            distancePicker.selectRow(index, inComponent: 0, animated: false)
+            
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -131,13 +137,14 @@ extension NaruMapSearchResultTableViewController : UIPickerViewDataSource {
 
 extension NaruMapSearchResultTableViewController : UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return (delegate as? NaruMapViewController)?.rangeTitles[row]
+        return (delegate as? NaruMapViewController)?.ranges[row].title
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if let vc = (delegate as? NaruMapViewController) {
-            let title = vc.rangeTitles[row]
-            vc.altitude = CLLocationDistance(vc.ranges[row])
+            UserDefaults.standard.lastSelectedRangeIndex = row
+            let title = vc.ranges[row].title
+            vc.altitude = vc.ranges[row].range
             headerTextField.text = title
             vc.reload()
             self.view.endEditing(true)

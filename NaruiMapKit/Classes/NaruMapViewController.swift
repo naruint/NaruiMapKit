@@ -55,9 +55,18 @@ public class NaruMapViewController: UIViewController {
     @IBOutlet var keywordSelectButtons:[UIButton]!
     
     @IBOutlet weak var moveToMyLocationButton: UIButton!
-    
-    public var ranges:[Int] = [500,1000,2000,4000,8000]
-    public var rangeTitles:[String] = ["500m", "1km", "2km", "4km","8km"]
+    public struct Range {
+        let range:CLLocationDistance
+        let title:String
+    }
+    public var ranges:[Range] = [
+        Range(range: 500, title: "500 m"),
+        Range(range: 1000, title: "1 Km"),
+        Range(range: 2000, title: "2 Km"),
+        Range(range: 4000, title: "4 Km"),
+        Range(range: 8000, title: "8 Km"),
+    ]
+
     public var viewModels:[String : [NaruMapApiManager.ViewModel]] = [:]
 
     
@@ -145,10 +154,14 @@ public class NaruMapViewController: UIViewController {
         sheet.scroll(toY: 300,duration: 0.25)
         sheet.isBlurHide = true
         sheet.view.backgroundColor = UIColor.white
+        
         pullableSheet = sheet
         moveToMyLocationButton.rx.tap.bind {[unowned self] (_) in
             moveMyLocation()
         }.disposed(by: disposeBag)
+        
+        let index = UserDefaults.standard.getLastSelectedRangeIndex(rangeCount: ranges.count)
+        altitude = ranges[index].range
     }
     
     func updateUI() {
