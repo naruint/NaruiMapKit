@@ -52,10 +52,10 @@ class NaruMapSearchResultTableViewController: UITableViewController {
         distancePicker.dataSource = self
         headerTextField.inputView = distancePicker
         
-        tableView.backgroundView = emptyView
+        
         emptyView.frame.size = tableView.frame.size
         emptyView.frame.size.height = 200
-        
+        tableView.addSubview(emptyView)
 
         headerButton.rx.tap.bind { [unowned self](_) in
             headerTextField.becomeFirstResponder()
