@@ -59,6 +59,7 @@ class NaruMapSearchResultTableViewController: UITableViewController {
         
         emptyView.frame.size = tableView.frame.size
         emptyView.frame.size.height = 350
+        emptyView.isHidden = true
         tableView.addSubview(emptyView)
 
         headerButton.rx.tap.bind { [unowned self](_) in
