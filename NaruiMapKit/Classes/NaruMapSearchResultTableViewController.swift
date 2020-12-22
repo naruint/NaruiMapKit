@@ -49,7 +49,12 @@ class NaruMapSearchResultTableViewController: UITableViewController {
         distancePicker.delegate = self
         distancePicker.dataSource = self
         headerTextField.inputView = distancePicker
-        tableView.addSubview(emptyView)
+        
+        tableView.backgroundView = emptyView
+        emptyView.frame.size = tableView.frame.size
+        emptyView.frame.size.height = 300
+        
+
         headerButton.rx.tap.bind { [unowned self](_) in
             headerTextField.becomeFirstResponder()
         }.disposed(by: disposeBag)
@@ -62,11 +67,6 @@ class NaruMapSearchResultTableViewController: UITableViewController {
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        emptyView.frame.size = tableView.frame.size
-        emptyView.frame.size.height = 300
-    }
     
     func checkEmptyViewHidden() {
         emptyView.isHidden = data.count > 0
