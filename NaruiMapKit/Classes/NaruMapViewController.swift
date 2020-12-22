@@ -66,7 +66,7 @@ public class NaruMapViewController: UIViewController {
         Range(range: 4000, title: "4 Km"),
         Range(range: 8000, title: "8 Km"),
     ]
-
+    public var emptyViewImage:UIImage? = nil
     public var viewModels:[String : [NaruMapApiManager.ViewModel]] = [:]
 
     

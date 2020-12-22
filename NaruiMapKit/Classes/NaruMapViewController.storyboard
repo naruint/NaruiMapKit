@@ -21,7 +21,7 @@
                         <color key="separatorColor" name="paleGreyTwo"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="NwO-yK-eLZ">
-                            <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                            <rect key="frame" x="0.0" y="186" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
@@ -105,6 +105,7 @@
                         </connections>
                     </tableView>
                     <connections>
+                        <outlet property="emptyImageView" destination="SC2-ZY-fQ3" id="m7o-be-gcU"/>
                         <outlet property="emptyView" destination="Hbt-G5-gYk" id="fDa-DH-0jP"/>
                         <outlet property="headerButton" destination="fvd-LU-wQ2" id="Dwa-GL-K1Z"/>
                         <outlet property="headerFirstLabel" destination="BLQ-J6-DNF" id="QIz-Lq-15x"/>
@@ -115,25 +116,33 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3PX-sp-9Ma" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <view contentMode="scaleToFill" id="Hbt-G5-gYk">
-                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="253"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4dE-MI-bTi">
-                            <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                            <rect key="frame" x="0.0" y="110" width="240" height="33.5"/>
                             <string key="text">선택하신 반경 이내에
 병원이 없습니다.</string>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" name="brownGrey"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon16Sound" translatesAutoresizingMaskIntoConstraints="NO" id="SC2-ZY-fQ3">
+                            <rect key="frame" x="93" y="44" width="54" height="54"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="54" id="UaW-Sd-D52"/>
+                                <constraint firstAttribute="width" constant="54" id="ZM4-f1-dRc"/>
+                            </constraints>
+                        </imageView>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="b06-mE-cbZ"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="b06-mE-cbZ" firstAttribute="trailing" secondItem="4dE-MI-bTi" secondAttribute="trailing" id="2aT-Bv-VzV"/>
+                        <constraint firstItem="SC2-ZY-fQ3" firstAttribute="centerX" secondItem="4dE-MI-bTi" secondAttribute="centerX" id="7vy-sQ-1f2"/>
+                        <constraint firstItem="4dE-MI-bTi" firstAttribute="centerY" secondItem="b06-mE-cbZ" secondAttribute="centerY" id="C2n-jN-4Qr"/>
+                        <constraint firstItem="4dE-MI-bTi" firstAttribute="top" secondItem="SC2-ZY-fQ3" secondAttribute="bottom" constant="12" id="Egm-Rj-fTC"/>
                         <constraint firstItem="4dE-MI-bTi" firstAttribute="leading" secondItem="b06-mE-cbZ" secondAttribute="leading" id="KeZ-M9-CHv"/>
-                        <constraint firstItem="b06-mE-cbZ" firstAttribute="bottom" secondItem="4dE-MI-bTi" secondAttribute="bottom" id="gue-cm-3av"/>
-                        <constraint firstItem="4dE-MI-bTi" firstAttribute="top" secondItem="b06-mE-cbZ" secondAttribute="top" id="k9W-xn-Cze"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" id="YlF-vG-ROj">
@@ -305,6 +314,7 @@
         <image name="buttonTinyRoundLineDisabled" width="28.5" height="29"/>
         <image name="icon16IconArrowDBlack" width="16" height="16"/>
         <image name="icon16Phone" width="16" height="16"/>
+        <image name="icon16Sound" width="16" height="17"/>
         <image name="icon24SpotBlack" width="24" height="24"/>
         <namedColor name="black">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

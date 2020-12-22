@@ -24,6 +24,8 @@ class NaruMapSearchResultTableViewController: UITableViewController {
                 NaruMapSearchResultTableViewController
         }
     }
+    
+    @IBOutlet weak var emptyImageView: UIImageView!
     @IBOutlet var emptyView: UIView!
     @IBOutlet var headerView: UIView!
     @IBOutlet weak var headerFirstLabel: UILabel!
@@ -52,7 +54,7 @@ class NaruMapSearchResultTableViewController: UITableViewController {
         
         tableView.backgroundView = emptyView
         emptyView.frame.size = tableView.frame.size
-        emptyView.frame.size.height = 300
+        emptyView.frame.size.height = 200
         
 
         headerButton.rx.tap.bind { [unowned self](_) in
@@ -63,7 +65,9 @@ class NaruMapSearchResultTableViewController: UITableViewController {
             let index = UserDefaults.standard.getLastSelectedRangeIndex(rangeCount: range.count)
             headerTextField.text = range[index].title
             distancePicker.selectRow(index, inComponent: 0, animated: false)
-            
+        }
+        if let img = (delegate as? NaruMapViewController)?.emptyViewImage {
+            emptyImageView.image = img
         }
     }
     
