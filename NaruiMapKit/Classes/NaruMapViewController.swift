@@ -117,6 +117,8 @@ public class NaruMapViewController: UIViewController {
         }
     }
 
+    var isMoveToMyRocation:Bool = false
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         camera.distance = altitude * 2
@@ -162,6 +164,14 @@ public class NaruMapViewController: UIViewController {
         
         let index = UserDefaults.standard.getLastSelectedRangeIndex(rangeCount: ranges.count)
         altitude = ranges[index].range
+        NotificationCenter.default.addObserver(forName: .locationUpdateNotification, object: nil, queue: nil) { [weak self](noti) in
+            if self?.isMovetoMyLocation == false {
+                if LocationManager.shared.myLocation.last != nil {
+                    self?.moveMyLocation()
+                    self?.isMovetoMyLocation = true
+                }
+            }
+        }
     }
     
     func updateUI() {
@@ -249,7 +259,6 @@ public class NaruMapViewController: UIViewController {
             } completion: { _ in
                 
             }
-
         }
     }
     

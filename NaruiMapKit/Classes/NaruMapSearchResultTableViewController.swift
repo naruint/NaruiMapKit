@@ -74,6 +74,7 @@ class NaruMapSearchResultTableViewController: UITableViewController {
         if let img = mapViewController?.emptyViewImage {
             emptyImageView.image = img
         }
+        
     }
     
     
