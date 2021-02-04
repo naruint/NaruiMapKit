@@ -50,13 +50,17 @@ class NaruMapSearchResultTableViewController: UITableViewController {
     
     let disposeBag = DisposeBag()
     
+    @objc func onSelect() {
+        view.endEditing(true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         distancePicker.delegate = self
         distancePicker.dataSource = self
         headerTextField.inputView = distancePicker
         
-        
+        headerTextField.makeConfirmToolBar(title: "", buttonTitle: "완료", target: self, action: #selector(self.onSelect))
         emptyView.frame.size = tableView.frame.size
         emptyView.frame.size.height = 350
         emptyView.isHidden = true
@@ -154,10 +158,15 @@ extension NaruMapSearchResultTableViewController : UIPickerViewDelegate {
         if let vc = mapViewController {
             UserDefaults.standard.lastSelectedRangeIndex = row
             let title = vc.ranges[row].title
-            vc.altitude = vc.ranges[row].range
+            vc.altitude = vc.ranges[row].range * 5
             headerTextField.text = title
             vc.reload()
-            self.view.endEditing(true)
+            mapViewController?.mapView.camera.altitude = vc.ranges[row].range * 5
+            if let location = LocationManager.shared.myLocation.last {
+                UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {[weak self]in
+                    self?.mapViewController?.mapView.centerCoordinate = location.coordinate
+                }
+            }
         }
     }
 }

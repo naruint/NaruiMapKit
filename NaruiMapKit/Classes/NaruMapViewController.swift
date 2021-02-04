@@ -163,7 +163,7 @@ public class NaruMapViewController: UIViewController {
         }.disposed(by: disposeBag)
         
         let index = UserDefaults.standard.getLastSelectedRangeIndex(rangeCount: ranges.count)
-        altitude = ranges[index].range
+        altitude = ranges[index].range * 5
         NotificationCenter.default.addObserver(forName: .locationUpdateNotification, object: nil, queue: nil) { [weak self](noti) in
             if self?.isMovetoMyLocation == false {
                 if LocationManager.shared.myLocation.last != nil {
@@ -305,9 +305,10 @@ extension NaruMapViewController : NaruMapSearchResultTableViewControllerDelegate
                 && ann.coordinate.latitude == coordinate.latitude
         }).first {
             mapView.selectAnnotation(ann, animated: true)
-            UIView.animateKeyframes(withDuration: 0.25, delay: 0.0, options: .calculationModeCubic) {[unowned self] in
-                mapView.centerCoordinate = coordinate
-            } completion: {_ in
+            UIView.animateKeyframes(withDuration: 0.25, delay: 0.0, options: .calculationModeCubic) {[weak self] in
+                self?.mapView.centerCoordinate = coordinate
+                
+            } completion: { _ in
                 
             }
         }        
