@@ -9,17 +9,64 @@ import UIKit
 import MapKit
 import RxCocoa
 import RxSwift
+import PullableSheet
+extension PullableSheet {
+    var isBlurHide:Bool {
+        set {
+            for view in view.subviews {
+                if let b = view as? UIVisualEffectView {
+                    b.isHidden = newValue
+                }
+            }
+        }
+        get {
+            for view in view.subviews {
+                if let b = view as? UIVisualEffectView {
+                    return b.isHidden
+                }
+            }
+            return false
+        }
+    }
+}
 
 public class NaruMapViewController: UIViewController {
-    public var keywords:String = "정신병원,정신상담센터"
+    let listVC = NaruMapSearchResultTableViewController.viewController
+    weak var pullableSheet:PullableSheet? = nil
+    @IBOutlet var customSheetHeaderView: UIView!
+
+    
+    enum Keyword : String {
+        case total = "정신병원,정신상담센터"
+        case first = "정신병원"
+        case second = "정신상담센터"
+    }
+    
+    var keyword:Keyword = .total
+    
+    public var keywords:String {
+        return keyword.rawValue
+    }
+    
     var keywordArray:[String] {
         self.keywords.components(separatedBy: ",")
     }
+
+    @IBOutlet var keywordSelectButtons:[UIButton]!
     
-    @IBOutlet weak var keywordLabel: UILabel!
-    
-    public var ranges:[Int] = [500,1000,2000,4000,8000]
-    public var rangeTitles:[String] = ["500m", "1km", "2km", "4km","8km"]
+    @IBOutlet weak var moveToMyLocationButton: UIButton!
+    public struct Range {
+        let range:CLLocationDistance
+        let title:String
+    }
+    public var ranges:[Range] = [
+        Range(range: 500, title: "500 m"),
+        Range(range: 1000, title: "1 Km"),
+        Range(range: 2000, title: "2 Km"),
+        Range(range: 4000, title: "4 Km"),
+        Range(range: 8000, title: "8 Km"),
+    ]
+    public var emptyViewImage:UIImage? = nil
     public var viewModels:[String : [NaruMapApiManager.ViewModel]] = [:]
 
     
@@ -31,6 +78,7 @@ public class NaruMapViewController: UIViewController {
                 }
                 return false
             }
+            listVC.data = data
             DispatchQueue.main.async {[unowned self] in
                 for ann in mapView.annotations  {
                     mapView.removeAnnotation(ann)
@@ -41,6 +89,7 @@ public class NaruMapViewController: UIViewController {
                     pin.title = document.place_name
                     mapView.addAnnotation(pin)
                 }
+                listVC.tableView.reloadData()
             }
         }
     }
@@ -48,14 +97,11 @@ public class NaruMapViewController: UIViewController {
     public var altitude:CLLocationDistance = 1000
     
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var rangeTextField: UITextField!
     
-    let rangePickerView = UIPickerView()
     let camera = MKMapCamera()
 
     let disposeBag = DisposeBag()
-    
+    var isApiCall = false
     public static var viewController : NaruMapViewController {
         if #available(iOS 13.0, *) {
             return
@@ -71,30 +117,75 @@ public class NaruMapViewController: UIViewController {
         }
     }
 
+    var isMoveToMyRocation:Bool = false
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         camera.distance = altitude * 2
         mapView.camera = camera
         mapView.delegate = self
-        rangePickerView.dataSource = self
-        rangePickerView.delegate = self
-        rangeTextField.text = "\(Int(altitude))"
-        rangeTextField.inputView = rangePickerView
-        rangeTextField.setDoneInputView(title: "done", target: self, action: #selector(self.onTouchDone(_:)))
-        if let index = ranges.firstIndex(where: { a -> Bool in
-            return a == Int(altitude)
-        }) {
-            rangePickerView.selectRow(index, inComponent: 0, animated: false)
-        }
+        
         loadData()
-
-        rangeTextField.setRightButtonDownStyle(disposeBag: disposeBag) { [unowned self](button) in
-            rangeTextField.becomeFirstResponder()
+        updateUI()
+        for (index,btn) in keywordSelectButtons.enumerated() {
+            btn.rx.tap.bind { [unowned self](_) in
+                switch index {
+                case 0:
+                    keyword = .total
+                case 1:
+                    keyword = .first
+                case 2:
+                    keyword = .second
+                default:
+                    break
+                }
+                reload()
+                updateUI()
+            }.disposed(by: disposeBag)
         }
-        keywordLabel.text = keywords
-//        for key in keywordArray {
-//            viewModels[key] = Array<NaruMapApiManager.ViewModel>()
-//        }
+        
+        listVC.delegate = self
+        moveToMyLocationButton.setBackgroundImage(UIColor.white.circleImage(diameter: moveToMyLocationButton.frame.size.width), for: .normal)
+        
+        customSheetHeaderView.frame.size = CGSize(width: UIScreen.main.bounds.width, height: 20)
+        
+        let sheet = PullableSheet(content: listVC, topBarStyle: .custom(customSheetHeaderView))
+        sheet.add(to: self)
+        sheet.snapPoints = [.custom(y: 250),
+                            .custom(y: UIScreen.main.bounds.height - 300)]
+        sheet.scroll(toY: 300,duration: 0.25)
+        sheet.isBlurHide = true
+        sheet.view.backgroundColor = UIColor.white
+        
+        pullableSheet = sheet
+        moveToMyLocationButton.rx.tap.bind {[unowned self] (_) in
+            moveMyLocation()
+        }.disposed(by: disposeBag)
+        
+        let index = UserDefaults.standard.getLastSelectedRangeIndex(rangeCount: ranges.count)
+        altitude = ranges[index].range * 5
+        NotificationCenter.default.addObserver(forName: .locationUpdateNotification, object: nil, queue: nil) { [weak self](noti) in
+            if self?.isMovetoMyLocation == false {
+                if LocationManager.shared.myLocation.last != nil {
+                    self?.moveMyLocation()
+                    self?.isMovetoMyLocation = true
+                }
+            }
+        }
+    }
+    
+    func updateUI() {
+        for btn in keywordSelectButtons {
+            btn.isSelected = false
+        }
+        switch keyword {
+        case .total:
+            keywordSelectButtons[0].isSelected = true
+        case .first:
+            keywordSelectButtons[1].isSelected = true
+        case .second:
+            keywordSelectButtons[2].isSelected = true
+        }
     }
     
     @objc func onTouchDone(_ sender:UIBarButtonItem) {
@@ -117,7 +208,12 @@ public class NaruMapViewController: UIViewController {
         return count
     }
     
-    private func loadData() {
+    func reload() {
+        viewModels.removeAll()
+        loadData()
+    }
+    
+    func loadData() {
     
         // 다 읽어왔으면 더 요청하지 않는다.
         if keywordArray.count == loadedKeywordCount {
@@ -129,7 +225,6 @@ public class NaruMapViewController: UIViewController {
                     }
                 }
             }
-            self.tableView.reloadData()
             return
         }
         let key = keywordArray[loadedKeywordCount]
@@ -140,6 +235,7 @@ public class NaruMapViewController: UIViewController {
             guard let s = self else {
                 return
             }
+            s.isApiCall = true
             print(viewModel ?? "")
             
             if let model = viewModel {
@@ -158,7 +254,11 @@ public class NaruMapViewController: UIViewController {
     
     private func moveMyLocation() {
         if let location = LocationManager.shared.myLocation.last {
-            mapView.centerCoordinate = location.coordinate
+            UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {[weak self]in
+                self?.mapView.centerCoordinate = location.coordinate
+            } completion: { _ in
+                
+            }
         }
     }
     
@@ -184,100 +284,33 @@ public class NaruMapViewController: UIViewController {
     }
 }
 
-extension NaruMapViewController : UITableViewDataSource {
-    public func numberOfSections(in tableView: UITableView) -> Int {
-        return data.count > 0 ? 1 : 0
-    }
-    
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
-    }
-    
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let data = self.data[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = data.place_name
-        cell.detailTextLabel?.text = data.phone
-        cell.detailTextLabel?.text?.append(" \(Int(data.getDistance() ?? 0)) m")
-        return cell
-    }
-    
-}
 
-extension NaruMapViewController : UITableViewDelegate {
-    
-    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let coordinate = data[indexPath.row].coordinate
-        
-        if let ann = mapView.annotations.filter({ (ann) -> Bool in
-            ann.coordinate.longitude == coordinate.longitude
-                && ann.coordinate.latitude == coordinate.latitude
-        }).first {
-            mapView.selectAnnotation(ann, animated: true)
-            UIView.animateKeyframes(withDuration: 0.25, delay: 0.0, options: .calculationModeCubic) {[unowned self] in
-                mapView.centerCoordinate = coordinate
-            } completion: {_ in
-                
-            }
-        }        
-    }
-}
 
 
 extension NaruMapViewController : MKMapViewDelegate {
     public func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let point = view.annotation as? MKPointAnnotation {
             let indexPath = findIndexPathBy(location: point.coordinate)
-            if tableView.indexPathForSelectedRow != indexPath {
-                tableView.selectRow(at: indexPath, animated: true, scrollPosition: .bottom)
+            listVC.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .top)
+        }
+    }
+}
+
+
+extension NaruMapViewController : NaruMapSearchResultTableViewControllerDelegate {
+    func mapSearchResultSelect(data: NaruMapApiManager.Document, indexPath: IndexPath) {
+        let coordinate = data.coordinate
+        if let ann = mapView.annotations.filter({ (ann) -> Bool in
+            ann.coordinate.longitude == coordinate.longitude
+                && ann.coordinate.latitude == coordinate.latitude
+        }).first {
+            mapView.selectAnnotation(ann, animated: true)
+            UIView.animateKeyframes(withDuration: 0.25, delay: 0.0, options: .calculationModeCubic) {[weak self] in
+                self?.mapView.centerCoordinate = coordinate
+                
+            } completion: { _ in
+                
             }
-        }
+        }        
     }
 }
-
-extension NaruMapViewController : UIPickerViewDataSource {
-    public func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        switch pickerView {
-        case rangePickerView:
-            return ranges.count
-        default:
-            return 0
-        }
-    }
-    
-}
-
-extension NaruMapViewController : UIPickerViewDelegate {
-    public func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        switch pickerView {
-        case rangePickerView:
-            return rangeTitles[row]
-        default:
-            return nil
-        }
-    }
-    public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        switch pickerView {
-        case rangePickerView:
-            let value = ranges[row]
-            rangeTextField.text = "\(value)"
-            altitude = CLLocationDistance(value)
-            UIView.animate(withDuration: 0.25) {[weak self]in
-                self?.camera.distance = CLLocationDistance(value) * 2
-            }
-            
-            viewModels.removeAll()
-            data.removeAll()
-            tableView.reloadData()
-            loadData()
-        default:
-            break
-        }
-
-    }
-}
-
-

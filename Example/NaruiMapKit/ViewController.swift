@@ -22,8 +22,13 @@ class ViewController: UIViewController {
         let radius = 2000
         let vc = NaruMapViewController.viewController
         vc.altitude = CLLocationDistance(radius)
-        self.present(vc, animated: true, completion: nil)
-
+        vc.emptyViewImage = UIImage(named: "icon16Caution")
+        let navi = UINavigationController(rootViewController: vc)
+        navi.modalPresentationStyle = .currentContext
+        
+        
+        self.present(navi, animated: true, completion: nil)
+ 
     }
     
     override func didReceiveMemoryWarning() {

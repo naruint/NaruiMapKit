@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "NMapsMap",
+        "repositoryURL": "git@github.com:stleamist/NMapsMap-SwiftPM.git",
+        "state": {
+          "branch": "main",
+          "revision": "9bde0c38b9d5787d5614b83491921b9924d6fae2",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
