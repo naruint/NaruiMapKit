@@ -158,9 +158,10 @@ extension NaruMapSearchResultTableViewController : UIPickerViewDelegate {
         if let vc = mapViewController {
             UserDefaults.standard.lastSelectedRangeIndex = row
             let title = vc.ranges[row].title
-            vc.altitude = vc.ranges[row].range * 5
+            vc.altitude = vc.ranges[row].range 
             headerTextField.text = title
             vc.reload()
+            self.tableView.reloadData()
             mapViewController?.mapView.camera.altitude = vc.ranges[row].range * 5
             if let location = LocationManager.shared.myLocation.last {
                 UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {[weak self]in

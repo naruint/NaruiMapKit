@@ -163,7 +163,7 @@ public class NaruMapViewController: UIViewController {
         }.disposed(by: disposeBag)
         
         let index = UserDefaults.standard.getLastSelectedRangeIndex(rangeCount: ranges.count)
-        altitude = ranges[index].range * 5
+        altitude = ranges[index].range 
         NotificationCenter.default.addObserver(forName: .locationUpdateNotification, object: nil, queue: nil) { [weak self](noti) in
             if self?.isMovetoMyLocation == false {
                 if LocationManager.shared.myLocation.last != nil {
@@ -236,8 +236,6 @@ public class NaruMapViewController: UIViewController {
                 return
             }
             s.isApiCall = true
-            print(viewModel ?? "")
-            
             if let model = viewModel {
                 if s.viewModels[key] == nil {
                     s.viewModels[key] = Array<NaruMapApiManager.ViewModel>()
@@ -253,11 +251,16 @@ public class NaruMapViewController: UIViewController {
     }
     
     private func moveMyLocation() {
+        
         if let location = LocationManager.shared.myLocation.last {
             UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {[weak self]in
                 self?.mapView.centerCoordinate = location.coordinate
-            } completion: { _ in
-                
+            } completion: { [weak self] _ in
+                if let s = self {
+                    if s.data.count == 0 {
+                        s.loadData()
+                    }
+                }
             }
         }
     }
