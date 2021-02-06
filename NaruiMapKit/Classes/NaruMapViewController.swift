@@ -233,6 +233,7 @@ public class NaruMapViewController: UIViewController {
         
         let index = UserDefaults.standard.getLastSelectedRangeIndex(rangeCount: ranges.count)
         altitude = ranges[index].range
+        mapView.camera.altitude = altitude * 5
         NaruMapApiManager.shared.get(query: key, radius: Int(altitude), page: page) { [weak self](viewModel) in
             guard let s = self else {
                 return
