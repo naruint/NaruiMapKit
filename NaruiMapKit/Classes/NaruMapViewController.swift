@@ -231,6 +231,8 @@ public class NaruMapViewController: UIViewController {
         let page = (viewModels[key]?.count ?? 0) + 1
         print(page)
         
+        let index = UserDefaults.standard.getLastSelectedRangeIndex(rangeCount: ranges.count)
+        altitude = ranges[index].range
         NaruMapApiManager.shared.get(query: key, radius: Int(altitude), page: page) { [weak self](viewModel) in
             guard let s = self else {
                 return
