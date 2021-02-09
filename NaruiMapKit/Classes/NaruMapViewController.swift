@@ -56,9 +56,14 @@ public class NaruMapViewController: UIViewController {
     
     @IBOutlet weak var moveToMyLocationButton: UIButton!
     public struct Range {
-        let range:CLLocationDistance
-        let title:String
+        public let range:CLLocationDistance
+        public let title:String
+        public init(range:CLLocationDistance, title:String) {
+            self.range = range
+            self.title = title
+        }
     }
+    
     public var ranges:[Range] = [
         Range(range: 500, title: "500 m"),
         Range(range: 1000, title: "1 Km"),
