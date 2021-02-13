@@ -21,6 +21,13 @@ class ViewController: UIViewController {
     @IBAction func onTouchupBtn(_ sender: Any) {
         let radius = 2000
         let vc = NaruMapViewController.viewController
+        vc.ranges = [
+            .init(range: 500, title: "500m"),
+            .init(range: 1000, title: "1km"),
+            .init(range: 5000, title: "5km"),
+            .init(range: 10000, title: "10km")
+        ]
+        
         vc.altitude = CLLocationDistance(radius)
         vc.emptyViewImage = UIImage(named: "icon16Caution")
         let navi = UINavigationController(rootViewController: vc)
