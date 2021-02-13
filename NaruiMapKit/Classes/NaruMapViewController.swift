@@ -51,6 +51,8 @@ public class NaruMapViewController: UIViewController {
     var keywordArray:[String] {
         self.keywords.components(separatedBy: ",")
     }
+    
+    var titles = Set<String>()
 
     @IBOutlet var keywordSelectButtons:[UIButton]!
     
@@ -218,10 +220,17 @@ public class NaruMapViewController: UIViewController {
         // 다 읽어왔으면 더 요청하지 않는다.
         if keywordArray.count == loadedKeywordCount {
             self.data.removeAll()
+            self.titles.removeAll()
+            
             for a in viewModels.values {
                 for viewModel in a {
                     for doc in viewModel.documents {
-                        self.data.append(doc)
+                        if self.titles.index(of: doc.id) == nil {
+                            self.data.append(doc)
+                            self.titles.insert(doc.id)
+                        } else {
+                            print("중복이라서 걸름 : \(doc.place_name)")
+                        }
                     }
                 }
             }
