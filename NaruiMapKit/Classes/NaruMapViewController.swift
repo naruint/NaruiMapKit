@@ -229,8 +229,8 @@ public class NaruMapViewController: UIViewController {
             
             for a in viewModels.values {
                 for viewModel in a {
-                    for doc in viewModel.documents {
-                        if self.titles.index(of: doc.id) == nil {
+                    for doc in viewModel.documents {                        
+                        if self.titles.firstIndex(of: doc.id) == nil {
                             self.data.append(doc)
                             self.titles.insert(doc.id)
                         } else {
