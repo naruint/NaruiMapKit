@@ -9,32 +9,11 @@ import UIKit
 import MapKit
 import RxCocoa
 import RxSwift
-import PullableSheet
-extension PullableSheet {
-    var isBlurHide:Bool {
-        set {
-            for view in view.subviews {
-                if let b = view as? UIVisualEffectView {
-                    b.isHidden = newValue
-                }
-            }
-        }
-        get {
-            for view in view.subviews {
-                if let b = view as? UIVisualEffectView {
-                    return b.isHidden
-                }
-            }
-            return false
-        }
-    }
-}
 
 public class NaruMapViewController: UIViewController {
-    let listVC = NaruMapSearchResultTableViewController.viewController
-    weak var pullableSheet:PullableSheet? = nil
+    weak var listVC:NaruMapSearchResultTableViewController? = nil
     @IBOutlet var customSheetHeaderView: UIView!
-
+    @IBOutlet weak var containerViewBottomLayout: NSLayoutConstraint!
     
     enum Keyword : String {
         case total = "정신병원,정신상담센터"
@@ -85,7 +64,7 @@ public class NaruMapViewController: UIViewController {
                 }
                 return false
             }
-            listVC.data = data
+            listVC?.data = data
             DispatchQueue.main.async {[unowned self] in
                 for ann in mapView.annotations  {
                     mapView.removeAnnotation(ann)
@@ -96,7 +75,7 @@ public class NaruMapViewController: UIViewController {
                     pin.title = document.place_name
                     mapView.addAnnotation(pin)
                 }
-                listVC.tableView.reloadData()
+                listVC?.tableView.reloadData()
             }
         }
     }
@@ -132,6 +111,8 @@ public class NaruMapViewController: UIViewController {
         mapView.camera = camera
         mapView.delegate = self
         
+        containerViewBottomLayout.constant = -(UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0)
+        
         loadData()
         updateUI()
         for (index,btn) in keywordSelectButtons.enumerated() {
@@ -151,20 +132,10 @@ public class NaruMapViewController: UIViewController {
             }.disposed(by: disposeBag)
         }
         
-        listVC.delegate = self
         moveToMyLocationButton.setBackgroundImage(UIColor.white.circleImage(diameter: moveToMyLocationButton.frame.size.width), for: .normal)
         
         customSheetHeaderView.frame.size = CGSize(width: UIScreen.main.bounds.width, height: 20)
         
-        let sheet = PullableSheet(content: listVC, topBarStyle: .custom(customSheetHeaderView))
-        sheet.add(to: self)
-        sheet.snapPoints = [.custom(y: 250),
-                            .custom(y: UIScreen.main.bounds.height - 300)]
-        sheet.scroll(toY: 300,duration: 0.25)
-        sheet.isBlurHide = true
-        sheet.view.backgroundColor = UIColor.white
-        
-        pullableSheet = sheet
         moveToMyLocationButton.rx.tap.bind {[unowned self] (_) in
             moveMyLocation()
         }.disposed(by: disposeBag)
@@ -179,8 +150,9 @@ public class NaruMapViewController: UIViewController {
                 }
             }
         }
+        
     }
-    
+        
     func updateUI() {
         for btn in keywordSelectButtons {
             btn.isSelected = false
@@ -302,6 +274,18 @@ public class NaruMapViewController: UIViewController {
         }
         return nil
     }
+    
+    public override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "embedList":
+            if let vc = segue.destination as? NaruMapSearchResultTableViewController {
+                vc.delegate = self
+                self.listVC = vc
+            }
+        default:
+            break
+        }
+    }
 }
 
 
@@ -311,7 +295,12 @@ extension NaruMapViewController : MKMapViewDelegate {
     public func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let point = view.annotation as? MKPointAnnotation {
             let indexPath = findIndexPathBy(location: point.coordinate)
-            listVC.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .top)
+            DispatchQueue.main.async {[weak self]in
+                self?.listVC?.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .top)
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+                    self?.listVC?.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .top)
+                }
+            }
         }
     }
 }
