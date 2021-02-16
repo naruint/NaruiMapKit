@@ -16,9 +16,9 @@ public class NaruMapViewController: UIViewController {
     @IBOutlet weak var containerViewBottomLayout: NSLayoutConstraint!
     
     enum Keyword : String {
-        case total = "정신병원,정신상담센터"
-        case first = "정신병원"
-        case second = "정신상담센터"
+        case total = "정신건강의학과,심리상담센터"
+        case first = "정신건강의학과"
+        case second = "심리상담센터"
     }
     
     var keyword:Keyword = .total
@@ -31,7 +31,13 @@ public class NaruMapViewController: UIViewController {
         self.keywords.components(separatedBy: ",")
     }
     
-    var titles = Set<String>()
+    struct PlaceId {
+        let id:String
+        let categoryName:String
+    }
+    
+    /** 중복 걸러내기 위한 세트*/
+    var idSet = Set<String>()
 
     @IBOutlet var keywordSelectButtons:[UIButton]!
     
@@ -197,16 +203,17 @@ public class NaruMapViewController: UIViewController {
         // 다 읽어왔으면 더 요청하지 않는다.
         if keywordArray.count == loadedKeywordCount {
             self.data.removeAll()
-            self.titles.removeAll()
-            
+            self.idSet.removeAll()
             for a in viewModels.values {
                 for viewModel in a {
                     for doc in viewModel.documents {                        
-                        if self.titles.firstIndex(of: doc.id) == nil {
-                            self.data.append(doc)
-                            self.titles.insert(doc.id)
+                        if let _ = idSet.firstIndex(of: doc.id + doc.category_name) {
+                            print("중복이라서 걸름 : \(doc.place_name) \(doc.category_name)")
                         } else {
-                            print("중복이라서 걸름 : \(doc.place_name)")
+                            print(doc.category_group_code)
+                            print(doc.category_name)
+                            data.append(doc)
+                            idSet.insert(doc.id + doc.category_name)
                         }
                     }
                 }
