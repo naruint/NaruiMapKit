@@ -14,10 +14,9 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         NaruMapApiManager.shared.apikey = "78d4a28c8001ec71019d268aaf039d82"
-        
     }
+    
     @IBAction func onTouchupBtn(_ sender: Any) {
         let radius = 2000
         let vc = NaruMapViewController.viewController
@@ -29,13 +28,11 @@ class ViewController: UIViewController {
         ]
         
         vc.altitude = CLLocationDistance(radius)
-        vc.emptyViewImage = UIImage(named: "icon16Caution")
-        let navi = UINavigationController(rootViewController: vc)
-        navi.modalPresentationStyle = .currentContext
+        vc.emptyViewImage = UIImage(named: "03IconEtcChallengeNormalComplete")
+        vc.hidesBottomBarWhenPushed = true
         
-        
-        self.present(navi, animated: true, completion: nil)
- 
+        navigationController?.pushViewController(vc, animated: true)
+         
     }
     
     override func didReceiveMemoryWarning() {

@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'NaruiMapKit'
-  s.version          = '0.1.19'
+  s.version          = '0.1.20'
   s.summary          = 'Narui Map Kit'
   s.description      = '키워드로 지도 검색 등을 사용하기 위한 라이브러리'
   s.homepage         = 'https://github.com/naruint/NaruiMapKit'

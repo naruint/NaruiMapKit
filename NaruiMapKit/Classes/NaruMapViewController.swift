@@ -280,6 +280,7 @@ public class NaruMapViewController: UIViewController {
         case "embedList":
             if let vc = segue.destination as? NaruMapSearchResultTableViewController {
                 vc.delegate = self
+                vc.emptyImageView.image = emptyViewImage
                 self.listVC = vc
             }
         default:
