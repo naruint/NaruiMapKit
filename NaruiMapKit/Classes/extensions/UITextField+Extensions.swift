@@ -43,7 +43,8 @@ extension UITextField {
     func makeConfirmToolBar(title:String, buttonTitle:String, target:Any?, action:Selector?, height:CGFloat = 40) {
         let textAtt:[NSAttributedString.Key : Any] = [
             .font:UIFont.systemFont(ofSize: 15, weight: .bold),
-            .foregroundColor:UIColor(named: "toolbarLabel")!
+            .foregroundColor:UIColor(named: "toolbarLabel", in: Bundle(for: NaruMapViewController.self), compatibleWith: nil)!
+            
         ]
         
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
@@ -57,9 +58,8 @@ extension UITextField {
         title.setTitleTextAttributes(textAtt, for: .highlighted)
         
         let toolbar = UIToolbar()
-        toolbar.tintColor =  UIColor(named: "toolbarLabel")
-        toolbar.backgroundColor = UIColor(named: "toolbarBG")
-
+        toolbar.tintColor =  UIColor(named: "toolbarLabel", in: Bundle(for: NaruMapViewController.self), compatibleWith: nil)
+        toolbar.backgroundColor = UIColor(named: "toolbarBG", in: Bundle(for: NaruMapViewController.self), compatibleWith: nil)
         
         toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: height)
         if #available(iOS 14.0, *) {
