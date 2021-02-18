@@ -39,3 +39,34 @@ extension UITextField {
     }
 }
 
+extension UITextField {
+    func makeConfirmToolBar(title:String, buttonTitle:String, target:Any?, action:Selector?, height:CGFloat = 40) {
+        let textAtt:[NSAttributedString.Key : Any] = [
+            .font:UIFont.systemFont(ofSize: 15, weight: .bold),
+            .foregroundColor:UIColor(named: "toolbarLabel")!
+        ]
+        
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let barButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: target, action: action)
+        
+        barButton.setTitleTextAttributes(textAtt, for: .normal)
+        barButton.setTitleTextAttributes(textAtt, for: .highlighted)
+        
+        let title = UIBarButtonItem(title: title, style: .plain, target: nil, action: nil)
+        title.setTitleTextAttributes(textAtt, for: .normal)
+        title.setTitleTextAttributes(textAtt, for: .highlighted)
+        
+        let toolbar = UIToolbar()
+        toolbar.tintColor =  UIColor(named: "toolbarLabel")
+        toolbar.backgroundColor = UIColor(named: "toolbarBG")
+
+        
+        toolbar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: height)
+        if #available(iOS 14.0, *) {
+            toolbar.setItems([title,.flexibleSpace(), barButton], animated: true)
+        } else {
+            toolbar.setItems([title,flexibleSpace, barButton], animated: true)
+        }
+        inputAccessoryView = toolbar
+    }
+}
